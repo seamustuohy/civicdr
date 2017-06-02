@@ -1,0 +1,231 @@
+.page__header {
+	background-color: $base-color;
+  box-shadow: $base-shadow;
+  z-index: 2;
+  position: relative;
+}
+
+.page__headline {
+  @include column(3/12);
+}
+
+.page__title {
+  margin-bottom: 0;
+  padding-top: $global-spacing;
+}
+
+.page__prime-nav {
+  float: right;
+  position: relative;
+  li {
+    display: inline-block;
+    list-style: none;
+    position: relative;
+    margin: ($global-spacing * 1.75) ($global-spacing * 2) 0 0;
+    &:last-child {
+      @include media(medium-up-nav) {
+        border-left: solid 1px $tertiary-color;
+        padding-left: $global-spacing * 2;
+      }
+      margin-right: 0;
+      position: relative;
+      top: $global-spacing/4;
+
+    };
+  }
+  .browse-menu {
+    float: right;
+    margin-top: $global-spacing/4;
+    @include media(medium-up-nav) {
+      margin-left: 0;
+      margin-top: 0;
+    }
+    margin-left: $global-spacing;
+  }
+  
+  .browse-menu--sub {
+    margin-top: 0;
+    text-align: left;
+    margin-left: 0;
+    margin-top: $global-spacing/8;
+    @include media(medium-up-nav) {
+      margin-top: 0;
+    }
+    li {
+      @include media(medium-nav-up) {
+       margin-top: 0;
+      }
+    }
+  }
+}
+
+#sub-nav-block-wrapper {
+  position: relative;
+}
+
+.browse-menu__item {
+  color: $primary-color;
+  font-weight: $base-font-light;
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
+}
+
+.browse-menu--sub {
+  li {
+    &:last-child {
+      border-left: none;
+      padding-left: 0;
+      margin-right: 0;
+      position: relative;
+      top: 0;
+    }
+    &:first-child {
+     margin-top: 0;
+    }
+  }
+}
+
+.browse-menu__item--active {
+  border-bottom: solid 2px darken($tertiary-color, 10%);
+}
+
+.sub-nav-block {
+  @include media(large-up) {
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    z-index: 1000;
+    transform: translate(-100%, 0);
+    width: auto;
+    margin: 0;
+    padding: $global-spacing;
+    overflow: hidden;
+    text-align: left;
+    color: $base-font-color;
+    font-size: 1rem;
+    line-height: 1.5;
+    background: #fff;
+    box-shadow: $base-shadow;
+    border-radius: $base-border-radius;
+    border: solid 1px $tertiary-color;
+    transition: opacity 0.16s ease 0s, margin 0.16s ease 0s, visibility 0.16s linear 0s;
+
+    /* Pre animation */
+
+    opacity: 0;
+    visibility: hidden;
+    margin-top: $global-spacing;
+
+    /* Post animation */
+
+    .sub-revealed & {
+      opacity: 1;
+      visibility: visible;
+      margin-top: $global-spacing;
+    }
+  }
+}
+
+.profile-nav {
+  span {
+    @extend .visually-hidden;
+  }
+
+  &:after {
+    @extend %collecticons-user;
+    font-size: 1.5rem;
+    color: $primary-color;
+    top: 0.5rem;
+    position: relative;
+    margin-left: 0;
+    @include media(medium-nav-up) {
+      margin-left: $global-spacing;
+    }
+  }
+}
+
+
+.page__prime-nav-title {
+  position: absolute;
+  color: $primary-color;
+  top: 1rem;
+  right: 0;
+  z-index: 4;
+  font-size: 1.25rem;
+  line-height: 1;
+  margin: 0;
+  padding: ($global-spacing * 1.5) $global-spacing;
+  transition: all 0.32s ease 0s;
+
+  a {
+    color: $primary-color;
+
+    &, *, &::after {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    &::after {
+      @extend %collecticons-hamburger-menu;
+      margin-left: $global-spacing / 4;
+    }
+  }
+
+  .offcanvas-revealed & {
+    width: 12rem;
+    background: #fff;
+    right: -2rem;
+/*    box-shadow: 0 2px 0 0 $base-semi-alpha-color;*/
+
+    a::after {
+      @extend %collecticons-xmark;
+      margin-left: $global-spacing / 4;
+    }
+  }
+
+  @include media(medium-up-nav) {
+    right: $global-spacing;
+  }
+
+  @include media(medium-up-nav) {
+    display: none;
+  }
+}
+
+.nav-block {
+  position: absolute;
+  top: 0;
+  z-index: 3;
+  width: 12rem;
+  padding: ($global-spacing * 4.5) 0 0 0;
+  background: #fff;
+  overflow-y: scroll;
+  height: 100vh;
+  transition: opacity 0.16s ease 0s, right 0.16s ease 0s, visibility 0.16s linear 0s;
+
+  /* Pre animation */
+  opacity: 0;
+  visibility: hidden;
+  right: -12rem;
+
+  /* Post animation */
+  .offcanvas-revealed & {
+    opacity: 1;
+    visibility: visible;
+    right: -2rem;
+    box-shadow: 0 0 15px 2px rgba($primary-color, 0.2);
+  }
+
+  @include media(medium-up-nav) {
+    position: static;
+    height: auto;
+    width: auto;
+    overflow: visible;
+    opacity: 1;
+    visibility: visible;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+  }
+}

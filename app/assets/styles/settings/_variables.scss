@@ -1,0 +1,79 @@
+/* ==========================================================================
+   Variables
+   ========================================================================== */
+
+/* Colors
+   ========================================================================== */
+
+$base-color: #FFFFFF;                                   // 
+$primary-color: #000;                                // dark grey
+$secondary-color: #50E3C2;                              // orange
+$tertiary-color: #EEEEEE;								// grey
+
+/* Helper colors */
+$link-color: $primary-color;
+$base-alpha-color: $base-color;
+
+/* Status colors */
+$unassigned-color: #FCF879;
+$assigned-color: #FBA94F;
+$inprogress-color: #FA748C;
+$resolved-color: #EE86F8;
+$reviewed-color: #9013FE;
+
+
+/* Typography
+   ========================================================================== */
+
+$root-font-size: 16px;
+
+$base-font-color: $primary-color;
+$base-font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$base-font-style: normal;
+$base-font-light: 300;
+$base-font-regular: 400;  
+$base-font-bold: 700;
+$base-font-weight: $base-font-regular;
+$base-font-size: 1rem;
+$base-line-height: 1.5;
+
+$code-font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+
+$heading-font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$heading-font-regular: 400;
+$heading-font-bold: 700;
+$heading-font-weight: $heading-font-bold;
+
+/* Decoration
+   ========================================================================== */
+
+/* Border radius */
+
+$base-border-radius: 0.25rem;
+$full-border-radius: 60rem;
+
+$base-shadow: 2px 2px 7px 0px rgba(0,0,0,0.08);
+$base-shadow-hover: 4px 4px 9px 0px rgba(0,0,0,0.2);
+
+
+/* Sizing, spacing and media queries
+   ========================================================================== */
+
+/* Spacing */
+
+$global-spacing: 1rem;
+
+/* Rows */
+
+$row-min-width: 320px;
+$row-max-width: 1280px;
+$jeet-max-width: $row-max-width; // reset jeet.gs max width
+
+/* Media queries */
+$xsmall-range: (0, 543px);
+$small-range: (543px, 799px);
+$medium-range: (800px, 991px);
+$large-range: (992px, 1199px);
+$xlarge-range: (1200px);
+
+$screen: "only screen"
