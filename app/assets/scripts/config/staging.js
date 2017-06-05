@@ -4,8 +4,8 @@
  */
 module.exports = {
   environment: 'staging',
-  baseUrl: 'TODO: BASEURL GOES HERE',
-  clientId: 'TODO: CLIENT ID GOES HERE',
-  domain: 'TODO: DOMAIN GOES HERE',
-  clientUrl: 'TODO: CLIENT URL GOES HERE'
+  baseUrl: 'https://asl19-civicdr-backend.herokuapp.com/',
+  clientId: 'vmv4I65vqUavxHr7yeD5Gxor2wqZIBD5',
+  domain: 'civicdr.auth0.com',
+  clientUrl: 'https://www.civicdr.org'
 };
