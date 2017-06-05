@@ -10,7 +10,7 @@ test:
     - yarn run test
 deployment:
   staging:
-    branch: develop
+    branch: master
     commands:
       - DS_ENV=staging yarn run build
       - aws s3 sync dist $STAGING_BUCKET_URL --delete
