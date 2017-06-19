@@ -55,7 +55,7 @@ const TicketEdit = React.createClass({
           <h1 className='inpage__title heading--medium'>Edit Ticket</h1>
           <form onSubmit={this.handleSubmit} ref={thisForm => { this.form = thisForm; }}>
 
-            {isAdmin || isSP
+            {isAdmin
               ? <div className='form__group'>
                 <label className='form__label-dark'>Status</label>
                   {_.map(ticketStatusLUT, (display, value) =>
