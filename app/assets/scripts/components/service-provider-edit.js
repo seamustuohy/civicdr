@@ -26,6 +26,8 @@ const ServiceProviderEdit = React.createClass({
   },
 
   handleSubmit: function (e) {
+    const isAdmin = this.props.roles && this.props.roles.includes('admin');
+
     // Don't send the form
     // The form will (still) do native HTML5 validation before executing
     e.preventDefault();
@@ -41,7 +43,7 @@ const ServiceProviderEdit = React.createClass({
       if (typeof data[mof] === 'undefined') { data[mof] = []; }
       if (!Array.isArray(data[mof])) { data[mof] = [data[mof]]; }
     });
-    data.rating = Number(data.rating);
+    if (isAdmin) { data.rating = Number(data.rating); }
 
     this.props.onSubmit(data);
   },
