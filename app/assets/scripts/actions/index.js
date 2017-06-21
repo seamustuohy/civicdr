@@ -188,10 +188,20 @@ export const updateTicketSP = (serviceProviderID) => {
 
 export const assignSPToTicket = (ticketID, serviceProviderID) => {
   return dispatch => {
-    request(`/tickets/${ticketID}/sp_profiles/${serviceProviderID}`, 'delete')
+    // Get currently-assigned SP ID, if there is one
+    request(`/tickets/${ticketID}`, 'get')
+      .then(res => {
+        const existingSPID = res.data.sp_assigned_id;
+        return existingSPID
+          ? request(`/tickets/${ticketID}/sp_profiles/${existingSPID}`, 'delete')
+          : Promise.resolve(null);
+      })
       .then(() => request(`/tickets/${ticketID}/sp_profiles/${serviceProviderID}`, 'post'))
       // Update the store
-      .then(() => dispatch(updateTicketSP(serviceProviderID)));
+      .then(() => {
+        dispatch(updateTicketSP(serviceProviderID));
+        dispatch(fetchTicketThreads(ticketID));
+      });
   };
 };
 
@@ -212,7 +222,10 @@ export const removeSPFromTicket = (ticketID, serviceProviderID) => {
   return dispatch => {
     request(`/tickets/${ticketID}/sp_profiles/${serviceProviderID}`, 'delete')
       // Update the store
-      .then(() => dispatch(removeTicketSP()));
+      .then(() => {
+        dispatch(removeTicketSP());
+        dispatch(fetchTicketThreads(ticketID));
+      });
   };
 };
 
