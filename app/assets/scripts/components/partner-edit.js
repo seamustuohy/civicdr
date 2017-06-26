@@ -33,6 +33,7 @@ const ImplementingPartnerEdit = React.createClass({
     // Assign default empty-array values to each of the multi-option fields
     const MULTI_OPTION_FIELDS = [
       'notification_prefs',
+      'notification_languages',
       'secure_channels',
       'types_of_work',
       'languages'
@@ -56,7 +57,7 @@ const ImplementingPartnerEdit = React.createClass({
 
             <div className='form__group'>
               <label className='form__label-dark' htmlFor='form-name'>Name</label>
-              <p className='form__help'>The member of your organization/team who will be managing this ticket. (Optional)</p>
+              <p className='form__help'>The member of your organization/team who will be managing this ticket.</p>
               <input
                 type='text'
                 id='form-name'
@@ -107,31 +108,31 @@ const ImplementingPartnerEdit = React.createClass({
               />
             </div>
 
-              <div className='form__group'>
-                <label className='form__label-dark' htmlFor='form-email-notifications'>Would you like to receive email notifications for changes to ticket statuses or assignments?</label>
-                  <label className='form__option form__option--inline form__option--custom-radio'>
-                    <input
-                      type='radio'
-                      name='email_notification'
-                      required={true}
-                      value={true}
-                      defaultChecked={this.props.existingImplementingPartner.email_notification}
-                    />
-                    <span className='form__option__text'>Yes</span>
-                    <span className='form__option__ui'></span>
-                  </label>
-                  <label className='form__option form__option--inline form__option--custom-radio'>
-                    <input
-                      type='radio'
-                      name='email_notification'
-                      required={true}
-                      value={false}
-                      defaultChecked={!this.props.existingImplementingPartner.email_notification}
-                    />
-                    <span className='form__option__text'>No</span>
-                    <span className='form__option__ui'></span>
-                  </label>
-              </div>
+            <div className='form__group'>
+              <label className='form__label-dark' htmlFor='form-email-notifications'>Would you like to receive email notifications for changes to ticket statuses or assignments?</label>
+                <label className='form__option form__option--inline form__option--custom-radio'>
+                  <input
+                    type='radio'
+                    name='email_notification'
+                    required={true}
+                    value={true}
+                    defaultChecked={this.props.existingImplementingPartner.email_notification}
+                  />
+                  <span className='form__option__text'>Yes</span>
+                  <span className='form__option__ui'></span>
+                </label>
+                <label className='form__option form__option--inline form__option--custom-radio'>
+                  <input
+                    type='radio'
+                    name='email_notification'
+                    required={true}
+                    value={false}
+                    defaultChecked={!this.props.existingImplementingPartner.email_notification}
+                  />
+                  <span className='form__option__text'>No</span>
+                  <span className='form__option__ui'></span>
+                </label>
+            </div>
 
             <div className='form__group checkboxes-light'>
               <label className='form__label-dark'>Notification Preferences</label>
@@ -154,12 +155,12 @@ const ImplementingPartnerEdit = React.createClass({
               <label className='form__label-dark'>Notification Languages</label>
               <p className='form__help'>Which languages would you like to receive informational notifications in?</p>
               {notificationLang.map(lang => (
-                <label className='form__option form__option--inline form__option--custom-checkbox' key={'notification_pref-' + lang}>
+                <label className='form__option form__option--inline form__option--custom-checkbox' key={'notification_languages-' + lang}>
                   <input
                     type='checkbox'
-                    name='notification_prefs'
+                    name='notification_languages'
                     value={lang}
-                    defaultChecked={this.props.existingImplementingPartner.notification_prefs.includes(lang)}
+                    defaultChecked={this.props.existingImplementingPartner.notification_languages.includes(lang)}
                   />
                   <span className='form__option__text'>{lang}</span>
                   <span className='form__option__ui'></span>
@@ -206,7 +207,7 @@ const ImplementingPartnerEdit = React.createClass({
                     type='checkbox'
                     name='types_of_work'
                     value={type.name}
-                    defaultChecked={this.props.existingImplementingPartner.types_of_work.includes(type)}
+                    defaultChecked={this.props.existingImplementingPartner.types_of_work.includes(type.name)}
                   />
                   <span className='form__option__text'>{type.name}</span>
                   <span className='form__option__ui'></span>
