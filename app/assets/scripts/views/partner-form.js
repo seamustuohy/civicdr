@@ -11,8 +11,7 @@ import {
   typesOfWork,
   secureChannels,
   notificationPrefs,
-  notificationLang,
-  notificationEmail
+  notificationLang
 } from '../constants';
 import { createIpProfile } from '../actions';
 
@@ -38,6 +37,7 @@ var PartnerForm = React.createClass({
     // Assign default empty-array values to each of the multi-option fields
     const MULTI_OPTION_FIELDS = [
       'notification_prefs',
+      'notification_languages',
       'secure_channels',
       'types_of_work',
       'languages'
@@ -117,17 +117,26 @@ var PartnerForm = React.createClass({
 
               <div className='form__group'>
                 <label className='form__label-dark' htmlFor='form-email-notifications'>Would you like to receive email notifications for changes to ticket statuses or assignments?</label>
-                {notificationEmail.map(option => (
-                  <label className='form__option form__option--inline form__option--custom-radio' key={'notification_pref-' + option}>
+                  <label className='form__option form__option--inline form__option--custom-radio'>
                     <input
                       type='radio'
-                      name='notification_prefs'
-                      value={option}
+                      name='email_notification'
+                      required={true}
+                      value={true}
                     />
-                    <span className='form__option__text'>{option}</span>
+                    <span className='form__option__text'>Yes</span>
                     <span className='form__option__ui'></span>
                   </label>
-                ))}
+                  <label className='form__option form__option--inline form__option--custom-radio'>
+                    <input
+                      type='radio'
+                      name='email_notification'
+                      required={true}
+                      value={false}
+                    />
+                    <span className='form__option__text'>No</span>
+                    <span className='form__option__ui'></span>
+                  </label>
               </div>
 
               <div className='checkboxes-light'>
@@ -135,10 +144,10 @@ var PartnerForm = React.createClass({
                 <p className='form__help'>Which informational notifications would you like to receive from CiviCDR? (These do not include platform notifications which can be turned off below.)</p>
                 <div className='form__group'>
                   {notificationPrefs.map(pref => (
-                    <label className='form__option form__option--custom-checkbox' key={'types_of_work-' + pref.name}>
+                    <label className='form__option form__option--custom-checkbox' key={'notification_prefs-' + pref.name}>
                       <input
                         type='checkbox'
-                        name='types_of_work'
+                        name='notification_prefs'
                         value={pref.name}
                       />
                       <span className='form__option__text'>{pref.name}</span>
@@ -153,10 +162,10 @@ var PartnerForm = React.createClass({
                 <label className='form__label-dark'>Notification Languages</label>
                 <p className='form__help'>Which languages would you like to receive informational notifications in?</p>
                 {notificationLang.map(lang => (
-                  <label className='form__option form__option--inline form__option--custom-checkbox' key={'notification_pref-' + lang}>
+                  <label className='form__option form__option--inline form__option--custom-checkbox' key={'notification_languages-' + lang}>
                     <input
                       type='checkbox'
-                      name='notification_prefs'
+                      name='notification_languages'
                       value={lang}
                     />
                     <span className='form__option__text'>{lang}</span>
