@@ -16,7 +16,10 @@ import {
   perWeekAvailability
 } from '../constants';
 
-import { createSpProfile } from '../actions';
+import {
+  createSpProfile,
+  fetchProfile
+} from '../actions';
 
 // A form view to create new Service Providers
 var ProviderForm = React.createClass({
@@ -50,6 +53,7 @@ var ProviderForm = React.createClass({
 
     this.props.dispatch(createSpProfile(data, isAdmin))
       .then(() => {
+        if (!isAdmin) { this.props.dispatch(fetchProfile()); }
         if (this.state && this.state.pathToRedirect) {
           this.props.router.push(this.state.pathToRedirect);
         } else {
