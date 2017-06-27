@@ -118,11 +118,6 @@ export const notificationLang = [
   'Farsi'
 ];
 
-export const notificationEmail = [
-  'Yes',
-  'No'
-];
-
 export const typesOfWork = [
   {name: 'Anti-Corruption and Transparency', description: 'The organization campaigns, or takes other actions against corruption and transparency.'},
   {name: 'Anti-War/Anti-Violence', description: 'The organization campaigns, or takes other actions against war.'},
