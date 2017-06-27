@@ -46,7 +46,7 @@ var ProviderForm = React.createClass({
       if (typeof data[mof] === 'undefined') { data[mof] = []; }
       if (!Array.isArray(data[mof])) { data[mof] = [data[mof]]; }
     });
-    data.rating = Number(data.rating);
+    if (isAdmin) { data.rating = Number(data.rating); }
 
     this.props.dispatch(createSpProfile(data, isAdmin))
       .then(() => {
