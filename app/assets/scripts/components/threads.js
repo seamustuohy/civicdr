@@ -23,10 +23,10 @@ class Threads extends React.Component {
     // These will not exist for users who aren't authorized to view them
     const note = this.props.threads.find(t => t.type === 'note');
     const ipThread = this.props.threads.find(t => t.type === 'ip');
-    const spThread = this.props.threads.find(t => t.type === 'sp');
+    const spThread = this.props.threads.find(t => t.type === 'sp' && t.status === 'active');
 
     const visibleThread = this.props.threads
-      .find(t => t.type === this.state.visibleThread);
+      .find(t => t.type === this.state.visibleThread && (t.type !== 'sp' || t.status === 'active'));
 
     const isAdmin = _.includes(this.props.roles, 'admin');
 
