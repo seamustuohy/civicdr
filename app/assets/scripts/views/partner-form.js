@@ -2,7 +2,8 @@
  * Form to register a new IP
  */
 
--'use strict';
+'use strict';
+
 import React, { PropTypes as T } from 'react';
 import { connect } from 'react-redux';
 import formToObject from 'form-to-object';
@@ -13,7 +14,10 @@ import {
   notificationPrefs,
   notificationLang
 } from '../constants';
-import { createIpProfile } from '../actions';
+import {
+  createIpProfile,
+  fetchProfile
+} from '../actions';
 
 import _ from 'lodash';
 
@@ -50,6 +54,7 @@ var PartnerForm = React.createClass({
 
     this.props.dispatch(createIpProfile(data, isAdmin))
       .then(() => {
+        if (!isAdmin) { this.props.dispatch(fetchProfile()); }
         if (this.state && this.state.pathToRedirect) {
           this.props.router.push(this.state.pathToRedirect);
         } else {
