@@ -101,7 +101,7 @@ function checkAuth (route) {
     let isAdmin = _.includes(userRoles, 'admin');
 
     let loggedOut = !auth.loggedIn();
-    let noProfile = !isAdmin && profile === null;
+    let noProfile = !isAdmin && _.isEmpty(profile);
 
     if (loggedOut || (needsProfile && noProfile)) {
       replace({pathname: '/login'});
