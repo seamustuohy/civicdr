@@ -212,6 +212,11 @@
   font-size: 0.875rem;
 }
 
+.field__container {
+  height: ($global-spacing * 4);
+  overflow: scroll;
+}
+
 .section--404 {
   padding: ($global-spacing * 6) 0;
   text-align: center;
