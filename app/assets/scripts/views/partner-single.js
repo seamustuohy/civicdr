@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import downloadObject from '../utils/download-object';
 
-import config from '../config';
 import { formatDate } from '../utils/format';
 import ListActions from '../components/list-actions';
 import TicketList from '../components/ticket-list';
@@ -150,7 +149,9 @@ var ImplemetingPartnerSingle = React.createClass({
                 </div>
                 <div className='profile-fields'>
                   <h2 className='field__title'> PGP Public Key</h2>
-                  <a target='_blank' className='field__description link--deco' href={`${config.baseUrl}/ip_profiles/${partner.id}/key`}>View key</a>
+                  <div className='field__container'>
+                    <p className='field__description'>{partner.pgp_key}</p>
+                  </div>
                 </div>
               </div>
             </div>

@@ -9,7 +9,6 @@ import moment from 'moment';
 import _ from 'lodash';
 import c from 'classnames';
 
-import config from '../config';
 import ListActions from '../components/list-actions';
 import TicketList from '../components/ticket-list';
 import ServiceProviderEdit from '../components/service-provider-edit';
@@ -145,7 +144,9 @@ var ServiceProviderSingle = React.createClass({
               </div>
               <div className='profile-fields'>
                 <h2 className='field__title'>PGP Public Key</h2>
-                <a target='_blank' className='field__description link--deco'href={`${config.baseUrl}/sp_profiles/${provider.id}/key`}> View Key</a>
+                <div className='field__container'>
+                  <p className='field__description'>{provider.pgp_key}</p>
+                </div>
               </div>
             </div>
           </section>
