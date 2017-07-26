@@ -4,6 +4,8 @@ import axios from 'axios';
 // Export the action string constants
 
 export const UPDATE_TOKEN = 'UPDATE_TOKEN';
+export const DELETE_TOKEN = 'DELETE_TOKEN';
+export const UPDATE_SECRET = 'UPDATE_SECRET';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 
@@ -52,6 +54,14 @@ export const REMOVE_MESSAGE = 'REMOVE_MESSAGE';
 
 export const updateTokenStatus = (err, token) => {
   return {type: UPDATE_TOKEN, data: token, err};
+};
+
+export const deleteTokenStatus = () => {
+  return {type: DELETE_TOKEN};
+};
+
+export const updateSecretStatus = (err, secret) => {
+  return {type: UPDATE_SECRET, data: secret, err};
 };
 
 export const updateProfileStatus = (err, askedForProfile, profile) => {

@@ -12,12 +12,11 @@
 import Auth0Lock from 'auth0-lock';
 import decode from 'jwt-decode';
 
-import {updateTokenStatus, logoutSuccess} from '../actions/index';
+import {updateTokenStatus, updateSecretStatus, logoutSuccess} from '../actions/index';
 import {clientUrl} from '../config';
 
 function getTokenExpirationDate (token) {
   const decoded = decode(token);
-
   if (!decoded.exp) {
     return null;
   }
@@ -29,13 +28,21 @@ function getTokenExpirationDate (token) {
 }
 
 function isTokenExpired (token) {
-  const date = getTokenExpirationDate(token);
-  const offsetSeconds = 0;
-  if (date === null) {
-    return false;
+  if (!token) {
+    return true;
   }
+  try {
+    const date = getTokenExpirationDate(token);
+    const offsetSeconds = 0;
+    if (date === null) {
+      return false;
+    }
 
-  return !(date.valueOf() > new Date().valueOf() + offsetSeconds * 1000);
+    return !(date.valueOf() > new Date().valueOf() + offsetSeconds * 1000);
+  // if token is corrupted return that it is expired
+  } catch (err) {
+    return true;
+  }
 }
 
 export function getRolesFromToken (token) {
@@ -50,6 +57,10 @@ export function getRolesFromToken (token) {
 
 export default class AuthService {
   constructor (clientID, domain, store) {
+    if (!this.getSecret()) {
+      this.newSecret();
+    }
+    const secret = this.getSecret();
     this.auth0 = new Auth0Lock(
       clientID,
       domain,
@@ -60,7 +71,8 @@ export default class AuthService {
           responseType: 'token',
           sso: false,
           params: {
-            scope: 'openid roles'
+            scope: 'openid roles',
+            state: secret
           }
         }
       }
@@ -70,13 +82,21 @@ export default class AuthService {
   }
 
   parseHash (hash) {
+    // complete the authentication flow
     this.auth0.resumeAuth(
       hash,
       (err, authResult) => {
-        this.setToken(authResult.idToken);
-        this.store.dispatch(updateTokenStatus(null, authResult.idToken));
-        if (err || (authResult && authResult.error)) {
-          this.store.dispatch(updateTokenStatus(authResult.error));
+        // Check the state param to ensure it is correct
+        if (!this.checkSecret(authResult.state)) {
+          this.store.dispatch(updateSecretStatus('Bad secret returned from Auth0. CSRF protections enabled.'));
+        // Won't get here (set token) if the state param is not properly set.
+        } else {
+          this.setToken(authResult.idToken);
+          this.store.dispatch(updateTokenStatus(null, authResult.idToken));
+          // Check if authentication failed
+          if (err || (authResult && authResult.error)) {
+            this.store.dispatch(updateTokenStatus(authResult.error));
+          }
         }
       }
     );
@@ -91,6 +111,25 @@ export default class AuthService {
     return !!token && !isTokenExpired(token);
   }
 
+  tokenValidJWT (token) {
+    if (!token) {
+      return true;
+    }
+    try {
+      if (decode(token)) {
+        return true;
+      }
+    } catch (err) {
+      return false;
+    }
+    return true;
+  }
+
+  tokenExpired () {
+    const token = this.getToken();
+    return isTokenExpired(token);
+  }
+
   setToken (idToken) {
     localStorage.setItem('id_token', idToken);
   }
@@ -103,4 +142,33 @@ export default class AuthService {
     localStorage.removeItem('id_token');
     return this.store.dispatch(logoutSuccess());
   }
+
+  setSecret (secret) {
+    localStorage.setItem('secret', secret);
+  }
+
+  checkSecret (secret) {
+    return this.getSecret() === secret;
+  }
+
+  getSecret () {
+    return localStorage.getItem('secret');
+  }
+
+  newSecret () {
+    // Create secret
+    const secret = this.createNonce(30);
+    // return secret
+    this.setSecret(secret);
+  }
+
+  createNonce (length) {
+    var text = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (var i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  }
+
 }
