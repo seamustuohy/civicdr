@@ -114,15 +114,16 @@ function checkAuth (route) {
     let expiredToken = auth.tokenExpired();
 
     /*  Permission Checks   */
-    // If the token is expired boot user
-    if (expiredToken) {
-      auth.logout();
-      replace({pathname: '/expired'});
-    }
     // If logged out push to login
     if (loggedOut || (needsProfile && noProfile)) {
       replace({pathname: '/login'});
     }
+    // If the token is expired boot user
+    if (auth.loggedIn() && expiredToken) {
+      auth.logout();
+      replace({pathname: '/expired'});
+    }
+
     // Check for role based access to page
     if (roles.length > 0) {
       let canAccess = false;
@@ -237,8 +238,9 @@ render(
           auth={auth}
         />
         <Route path="/unauthorized" component={UhOh} status={401} />
-        <Route path="*" component={UhOh} status={404} />
         <Route path="/expired" component={UhOh} status={440} />
+        <Route path="*" component={UhOh} status={404} />
+
       </Route>
     </Router>
   </Provider>,
