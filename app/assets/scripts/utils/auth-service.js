@@ -50,7 +50,9 @@ export function getRolesFromToken (token) {
 
 export default class AuthService {
   constructor (clientID, domain, store) {
-    this.newSecret();
+    if ( !this.getSecret() ) {
+      this.newSecret();
+    }
     const secret = this.getSecret();
     this.auth0 = new Auth0Lock(
       clientID,
