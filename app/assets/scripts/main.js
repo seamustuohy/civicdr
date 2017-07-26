@@ -42,8 +42,7 @@ import AuthCallback from './views/auth-callback';
 // Utilities
 import AuthService from './utils/auth-service';
 import config from './config';
-import {updateTokenStatus} from './actions';
-import {updateSecretStatus} from './actions';
+import {updateTokenStatus, updateSecretStatus} from './actions';
 const auth = new AuthService(config.clientId, config.domain, store);
 
 const history = syncHistoryWithStore(hashHistory, store);
@@ -112,12 +111,12 @@ function checkAuth (route) {
 
     let loggedOut = !auth.loggedIn();
     let noProfile = !isAdmin && _.isEmpty(profile);
-    let expiredToken = auth.tokenExpired()
+    let expiredToken = auth.tokenExpired();
 
     /*  Permission Checks   */
     // If the token is expired boot user
     if (expiredToken) {
-      auth.logout()
+      auth.logout();
       replace({pathname: '/expired'});
     // If logged out push to login
     } else if (loggedOut || (needsProfile && noProfile)) {
