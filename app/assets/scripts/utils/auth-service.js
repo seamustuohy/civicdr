@@ -12,7 +12,7 @@
 import Auth0Lock from 'auth0-lock';
 import decode from 'jwt-decode';
 
-import {updateTokenStatus, logoutSuccess} from '../actions/index';
+import {updateTokenStatus, updateSecretStatus, logoutSuccess} from '../actions/index';
 import {clientUrl} from '../config';
 
 function getTokenExpirationDate (token) {
@@ -50,8 +50,8 @@ export function getRolesFromToken (token) {
 
 export default class AuthService {
   constructor (clientID, domain, store) {
-    this.newSecret()
-    const secret = this.getSecret()
+    this.newSecret();
+    const secret = this.getSecret();
     this.auth0 = new Auth0Lock(
       clientID,
       domain,
@@ -79,7 +79,7 @@ export default class AuthService {
       (err, authResult) => {
         // Check the state param to ensure it is correct
         if (!this.checkSecret(authResult.state)) {
-          this.store.dispatch(updateSecretStatus("Bad secret returned from Auth0. CSRF protections enabled."));
+          this.store.dispatch(updateSecretStatus('Bad secret returned from Auth0. CSRF protections enabled.'));
         // Won't get here (set token) if the state param is not properly set.
         } else {
           this.setToken(authResult.idToken);
@@ -104,7 +104,7 @@ export default class AuthService {
     return !!token && !isTokenExpired(token);
   }
 
-  tokenExpired() {
+  tokenExpired () {
     const token = this.getToken();
     return !isTokenExpired(token);
   }
@@ -135,19 +135,18 @@ export default class AuthService {
     return localStorage.getItem('secret');
   }
 
-  newSecret() {
+  newSecret () {
     // Create secret
     const secret = this.createNonce(30);
     // return secret
-    this.setSecret(secret)
+    this.setSecret(secret);
   }
 
-
   createNonce (length) {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for(var i = 0; i < length; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    var text = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (var i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
   }

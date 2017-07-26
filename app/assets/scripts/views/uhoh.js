@@ -18,11 +18,11 @@ var UhOh = React.createClass({
     console.log(this.props.route);
     let statusMessage;
     if (this.props.route.status === 401) {
-      statusMessage = "You can't go there!"
+      statusMessage = 'You can\'t go there!';
     } else if (this.props.route.status === 440) {
-      statusMessage = "Your session has expired."
+      statusMessage = 'Your session has expired.';
     } else {
-      statusMessage = "Looks like you're lost."
+      statusMessage = 'Looks like you\'re lost.';
     }
     return (
       <section className="section section--404">
