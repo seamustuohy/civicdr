@@ -10,24 +10,7 @@ test:
     - yarn run test
 deployment:
   staging:
-    branch: master
-    #heroku:
-      #appname: sleepy-bayou-47871
+    branch: csrf_protection
     commands:
       - DS_ENV=staging yarn run build
-      - |
-        cat >~/.netrc <<EOF
-        machine api.heroku.com
-          login $HEROKU_EMAIL
-          password $HEROKU_TOKEN
-        machine git.heroku.com
-          login $HEROKU_EMAIL
-          password $HEROKU_TOKEN
-        EOF
-      - chmod 600 ~/.netrc # Heroku cli complains about permissions without this
-      - "[[ ! -s \"$(git rev-parse --git-dir)/shallow\" ]] || git fetch --unshallow"
-      - git push git@heroku.com:sleepy-bayou-47871.git $CIRCLE_SHA1:refs/heads/master
-      -
-      #- heroku run rake db:migrate --app sleepy-bayou-47871:
-      #    timeout: 400 # if your deploys take a long time
-      #- aws s3 sync dist $STAGING_BUCKET_URL --delete
+      - aws s3 sync dist $STAGING_BUCKET_URL --delete
