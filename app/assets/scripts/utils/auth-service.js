@@ -50,7 +50,7 @@ export function getRolesFromToken (token) {
 
 export default class AuthService {
   constructor (clientID, domain, store) {
-    if ( !this.getSecret() ) {
+    if (!this.getSecret()) {
       this.newSecret();
     }
     const secret = this.getSecret();
