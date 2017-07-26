@@ -108,7 +108,7 @@ export default class AuthService {
 
   tokenExpired () {
     const token = this.getToken();
-    return !isTokenExpired(token);
+    return isTokenExpired(token);
   }
 
   setToken (idToken) {
