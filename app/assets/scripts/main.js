@@ -118,11 +118,13 @@ function checkAuth (route) {
     if (expiredToken) {
       auth.logout();
       replace({pathname: '/expired'});
+    }
     // If logged out push to login
-    } else if (loggedOut || (needsProfile && noProfile)) {
+    if (loggedOut || (needsProfile && noProfile)) {
       replace({pathname: '/login'});
+    }
     // Check for role based access to page
-    } else if (roles.length > 0) {
+    if (roles.length > 0) {
       let canAccess = false;
       roles.forEach(role => {
         canAccess = _.includes(userRoles, role) || canAccess;
