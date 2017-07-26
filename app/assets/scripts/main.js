@@ -114,14 +114,15 @@ function checkAuth (route) {
     let expiredToken = auth.tokenExpired();
 
     /*  Permission Checks   */
-    // If logged out push to login
-    if (loggedOut || (needsProfile && noProfile)) {
-      replace({pathname: '/login'});
-    }
     // If the token is expired boot user
     if (auth.loggedIn() && expiredToken) {
       auth.logout();
       replace({pathname: '/expired'});
+    }
+
+    // If logged out push to login
+    if (loggedOut || (needsProfile && noProfile)) {
+      replace({pathname: '/login'});
     }
 
     // Check for role based access to page
