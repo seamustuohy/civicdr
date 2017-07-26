@@ -49,7 +49,9 @@ export function getRolesFromToken (token) {
 }
 
 export default class AuthService {
-  constructor (clientID, domain, store) {
+  constructor (clientID, domain, store, secret) {
+    this.newSecret()
+    const secret = this.getSecret()
     this.auth0 = new Auth0Lock(
       clientID,
       domain,
@@ -60,7 +62,8 @@ export default class AuthService {
           responseType: 'token',
           sso: false,
           params: {
-            scope: 'openid roles'
+            scope: 'openid roles',
+            state: secret
           }
         }
       }
@@ -70,13 +73,21 @@ export default class AuthService {
   }
 
   parseHash (hash) {
+    // complete the authentication flow
     this.auth0.resumeAuth(
       hash,
       (err, authResult) => {
-        this.setToken(authResult.idToken);
-        this.store.dispatch(updateTokenStatus(null, authResult.idToken));
-        if (err || (authResult && authResult.error)) {
-          this.store.dispatch(updateTokenStatus(authResult.error));
+        // Check the state param to ensure it is correct
+        if (!this.checkSecret(authResult.state)) {
+          this.store.dispatch(updateSecretStatus("Bad secret returned from Auth0. CSRF protections enabled."));
+        // Won't get here (set token) if the state param is not properly set.
+        } else {
+          this.setToken(authResult.idToken);
+          this.store.dispatch(updateTokenStatus(null, authResult.idToken));
+          // Check if authentication failed
+          if (err || (authResult && authResult.error)) {
+            this.store.dispatch(updateTokenStatus(authResult.error));
+          }
         }
       }
     );
@@ -88,7 +99,14 @@ export default class AuthService {
 
   loggedIn () {
     const token = this.getToken();
+    // token is not null
+    // token is not expired
     return !!token && !isTokenExpired(token);
+  }
+
+  tokenExpired() {
+    const token = this.getToken();
+    return !isTokenExpired(token);
   }
 
   setToken (idToken) {
@@ -101,6 +119,37 @@ export default class AuthService {
 
   logout () {
     localStorage.removeItem('id_token');
+    localStorage.removeItem('secret');
     return this.store.dispatch(logoutSuccess());
   }
+
+  setSecret (secret) {
+    localStorage.setItem('secret', secret);
+  }
+
+  checkSecret (secret) {
+    return this.getSecret() === secret;
+  }
+
+  getSecret () {
+    return localStorage.getItem('secret');
+  }
+
+  newSecret() {
+    // Create secret
+    const secret = this.createNonce(30);
+    // return secret
+    this.setSecret(secret)
+  }
+
+
+  createNonce (length) {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for(var i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  }
+
 }

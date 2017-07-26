@@ -43,6 +43,7 @@ import AuthCallback from './views/auth-callback';
 import AuthService from './utils/auth-service';
 import config from './config';
 import {updateTokenStatus} from './actions';
+import {updateSecretStatus} from './actions';
 const auth = new AuthService(config.clientId, config.domain, store);
 
 const history = syncHistoryWithStore(hashHistory, store);
@@ -53,17 +54,26 @@ const scrollerMiddleware = useScroll((prevRouterProps, currRouterProps) => {
       decodeURIComponent(prevRouterProps.location.pathname);
 });
 
+// Check to see if we are logged in
+// If we are then update our id, role, and state to include existing data
 if (auth.loggedIn()) {
   store.dispatch(updateTokenStatus(null, auth.getToken()));
+  store.dispatch(updateSecretStatus(null, auth.getSecret()));
 }
+
+/*
+ * Parse & Check Authorization Results are Correct
+ * Will not allow auth token to be set if
+ * CSRF secret is not correct.
+*/
 
 const parseAuthHash = (nextState, replace) => {
   auth.parseHash(nextState.location.pathname.slice(1));
 };
 
 /*
- * Middleware function to check authorization against
- * user roles
+ * Middleware function to check authorization against user roles
+ * and token expiration
  * Block the user from accessing a view if they aren't qualified
  * Relies on the `roles` array of the user, found in the Redux store
  */
@@ -102,12 +112,18 @@ function checkAuth (route) {
 
     let loggedOut = !auth.loggedIn();
     let noProfile = !isAdmin && _.isEmpty(profile);
+    let expiredToken = auth.tokenExpired()
 
-    if (loggedOut || (needsProfile && noProfile)) {
+    /*  Permission Checks   */
+    // If the token is expired boot user
+    if (expiredToken) {
+      auth.logout()
+      replace({pathname: '/expired'});
+    // If logged out push to login
+    } else if (loggedOut || (needsProfile && noProfile)) {
       replace({pathname: '/login'});
-    }
-
-    if (roles.length > 0) {
+    // Check for role based access to page
+    } else if (roles.length > 0) {
       let canAccess = false;
       roles.forEach(role => {
         canAccess = _.includes(userRoles, role) || canAccess;
@@ -221,6 +237,7 @@ render(
         />
         <Route path="/unauthorized" component={UhOh} status={401} />
         <Route path="*" component={UhOh} status={404} />
+        <Route path="/expired" component={UhOh} status={440} />
       </Route>
     </Router>
   </Provider>,
