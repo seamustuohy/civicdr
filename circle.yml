@@ -12,5 +12,6 @@ deployment:
   staging:
     branch: master
     commands:
+      - npm rebuild node-sass
       - DS_ENV=staging yarn run build
       - aws s3 sync dist $STAGING_BUCKET_URL --delete
