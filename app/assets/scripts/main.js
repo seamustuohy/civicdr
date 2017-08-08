@@ -63,11 +63,15 @@ if (auth.loggedIn()) {
 /*
  * Parse & Check Authorization Results are Correct
  * Will not allow auth token to be set if
- * CSRF secret is not correct.
+ * CSRF secret is not correct and will redirect to
+ * the unauthorized page.
+ * Run on auth-token check page and logout.
 */
-
 const parseAuthHash = (nextState, replace) => {
-  auth.parseHash(nextState.location.pathname.slice(1));
+  let validHash = auth.parseHash(nextState.location.pathname.slice(1));
+  if (validHash === false) {
+    replace({pathname: '/unauthorized'});
+  }
 };
 
 /*
@@ -107,11 +111,11 @@ function checkAuth (route) {
     let needsProfile = opts.needsProfile;
 
     // If the token is expired or does not exist
-    // clear the state without redirecting
+    // send a user to an unauthorized page
     let expiredToken = auth.tokenExpired();
     let isToken = auth.getToken();
     if (!isToken || expiredToken) {
-      auth.logout();
+      replace({pathname: '/unauthorized'});
     }
 
     let {roles: userRoles, profile} = store.getState().auth;
@@ -239,7 +243,6 @@ render(
           auth={auth}
         />
         <Route path="/unauthorized" component={UhOh} status={401} />
-        <Route path="/expired" component={UhOh} status={440} />
         <Route path="*" component={UhOh} status={404} />
 
       </Route>
