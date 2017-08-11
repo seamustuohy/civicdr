@@ -103,7 +103,7 @@ export const perWeekAvailability = [
 export const secureChannels = [
   'PGP',
   'Signal',
-  'Adium/Pidgin',
+  'Off-the-Record Messaging (OTR)',
   'Other'
 ];
 
