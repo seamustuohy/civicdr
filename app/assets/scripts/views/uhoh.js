@@ -16,6 +16,14 @@ var UhOh = React.createClass({
 
   render: function () {
     console.log(this.props.route);
+    let statusMessage;
+    if (this.props.route.status === 401) {
+      statusMessage = 'You can\'t go there!';
+    } else if (this.props.route.status === 440) {
+      statusMessage = 'Your session has expired.';
+    } else {
+      statusMessage = 'Looks like you\'re lost.';
+    }
     return (
       <section className="section section--404">
         <div className="inner">
@@ -24,9 +32,7 @@ var UhOh = React.createClass({
           </header>
           <div className="section__body">
             <p>
-              {this.props.route.status === 401
-                ? "You can't go there!"
-                : "Looks like you're lost."}
+              {statusMessage}
             </p>
             <Link to="/">
               <button className="button button--base button--large">
