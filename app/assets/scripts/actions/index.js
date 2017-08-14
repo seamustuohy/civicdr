@@ -52,9 +52,9 @@ export const REMOVE_MESSAGE = 'REMOVE_MESSAGE';
 export const checkErrors = (err) => {
   // If the error is a 401 redirect the user to the unauthorized page.
   if (err.response.status === 401) {
-    dispatch(push('/unauthorized'))
-  }
-}
+    dispatch(push('/unauthorized'));
+  };
+};
 
 // Create the action-generators themselves
 

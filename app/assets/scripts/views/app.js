@@ -25,7 +25,8 @@ var App = React.createClass({
     dispatch: T.func,
     profile: T.object,
     route: T.object,
-    roles: T.array
+    roles: T.array,
+    secret: T.string
   },
 
   componentDidMount: function () {
@@ -61,7 +62,8 @@ const mapStateToProps = state => {
   return {
     dispatch: state.dispatch,
     roles: state.auth.roles,
-    profile: state.auth.profile
+    profile: state.auth.profile,
+    secret: state.auth.secret
   };
 };
 
