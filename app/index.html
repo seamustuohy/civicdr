@@ -45,12 +45,7 @@
 
   </head>
   <body>
-    <script type="text/javascript">
-     if (typeof Object.assign == "undefined") {
-       var app = document.getElementById('app-container');
-       app.innerHTML += 'Your browser is not compatable with the CiviCDR platform. Please use an updated version of the Chrome or Firefox browser.';
-     };
-    </script>
+
     <div id="app-container">
     <!-- page -->
     </div>
@@ -62,6 +57,11 @@
     <!-- build:js assets/scripts/bundle.js -->
     <script src="/assets/scripts/bundle.js"></script>
     <!-- endbuild -->
-
+    <script type="text/javascript">
+     if (typeof Object.assign == "undefined") {
+       var app = document.getElementById('app-container');
+       app.innerHTML += 'Your browser is not compatable with the CiviCDR platform. Please use an updated version of the Chrome or Firefox browser.';
+     };
+    </script>
   </body>
 </html>
