@@ -10,7 +10,7 @@ test:
     - yarn run test
 deployment:
   staging:
-    branch: master
+    branch: dev
     commands:
       - npm rebuild node-sass
       - DS_ENV=staging yarn run build
