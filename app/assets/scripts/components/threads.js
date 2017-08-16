@@ -73,8 +73,8 @@ class Threads extends React.Component {
              disabled={this.newMessageField.value === ''}
              className='button button--large button--base'
              onClick={() => {
-                 this.props.create(visibleThread.id, this.newMessageField.value);
-                 this.newMessageField.value = '';
+               this.props.create(visibleThread.id, this.newMessageField.value);
+               this.newMessageField.value = '';
              }
                      }>Comment</button>
             </div>
