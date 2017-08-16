@@ -61,8 +61,23 @@ class Threads extends React.Component {
             })}
 
             <div className='add__thread-content'>
-              <textarea ref={newMessageField => { this.newMessageField = newMessageField; }} className="form__control add" id="form-textarea-1" rows="4"></textarea>
-              <button className='button button--large button--base' onClick={() => { this.props.create(visibleThread.id, this.newMessageField.value); this.newMessageField.value = ''; }}>Comment</button>
+         <textarea
+           ref={newMessageField => { this.newMessageField = newMessageField; }}
+           className="form__control add"
+           id="form-textarea-1"
+           rows="4"
+         >
+         </textarea>
+            <button
+             disabled={this.newMessageField.value === ''}
+             className='button button--large button--base'
+             onClick={() => {
+               if (this.newMessageField.value !== '') {
+                 this.props.create(visibleThread.id, this.newMessageField.value);
+                 this.newMessageField.value = '';
+               }
+             }
+                     }>Comment</button>
             </div>
           </div>
           : ''
