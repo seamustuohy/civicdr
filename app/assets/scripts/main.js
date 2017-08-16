@@ -61,11 +61,6 @@ const parseAuthHash = (nextState, replace) => {
   auth.parseHash(nextState.location.pathname.slice(1));
 };
 
-const checkUserTokens = (secret) => {
-  this.props.route.auth.checkSecret(secret)
-};
-
-
 /*
  * Middleware function to check authorization against
  * user roles

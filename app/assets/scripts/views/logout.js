@@ -19,10 +19,10 @@ var Logout = React.createClass({
   componentWillMount: function () {
     let {secret} = this.props;
     if (this.props.route.auth.checkSecret(secret)) {
-        this.props.route.auth.logout();
-        this.props.router.push('/');
-      } else {
-        this.props.router.push('/unauthorized');
+      this.props.route.auth.logout();
+      this.props.router.push('/');
+    } else {
+      this.props.router.push('/unauthorized');
     }
   },
 
