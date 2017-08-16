@@ -52,8 +52,10 @@ export const REMOVE_MESSAGE = 'REMOVE_MESSAGE';
 export const checkErrors = (err) => {
   // If the error is a 401 redirect the user to the unauthorized page.
   if (err.response.status === 401) {
-    dispatch(push('/unauthorized'));
-  };
+    return push('/unauthorized');
+  } else {
+    return {type: 'UNKNOWN_ERROR', data: err}
+  }
 };
 
 // Create the action-generators themselves
@@ -119,7 +121,7 @@ export const fetchTickets = () => {
     request('/tickets', 'get').then(res => {
       dispatch(getTickets(res.data));
     })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -132,7 +134,7 @@ export const fetchTicketSingle = ticketID => {
     request(`/tickets/${ticketID}`, 'get').then(res => {
       dispatch(getTicketSingle(res.data));
     })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -149,7 +151,7 @@ export const deleteTickets = (ids, redirect) => {
         dispatch(removeTickets(ids));
         if (redirect) redirect();
       })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -162,7 +164,7 @@ export const assignStatusToTickets = (status, ticketIDs) => {
     axios
       .all(ticketIDs.map(ticketID => request(`/tickets/${ticketID}`, 'put', {data: {status}})))
       .then(() => dispatch(updateTicketStatuses(status, ticketIDs)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -172,7 +174,7 @@ export const addGroupingToTicket = (ticketID, groupingID) => {
       // Refresh the ticket in the store
       .then(() => request(`/tickets/${ticketID}`, 'get'))
       .then(res => dispatch(getTicketSingle(res.data)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -183,7 +185,7 @@ export const createGroupingAndAddToTicket = (title, description, ticketID) => {
       // Refresh the ticket in the store
       .then(() => request(`/tickets/${ticketID}`, 'get'))
       .then(res => dispatch(getTicketSingle(res.data)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -195,7 +197,7 @@ export const removeGroupingFromTicket = (ticketID, groupingID) => {
   return dispatch => {
     request(`/tickets/${ticketID}/groupings/${groupingID}`, 'delete')
       .then(() => dispatch(removeTicketGrouping(groupingID)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -219,7 +221,7 @@ export const assignSPToTicket = (ticketID, serviceProviderID) => {
         dispatch(updateTicketSP(serviceProviderID));
         dispatch(fetchTicketThreads(ticketID));
       })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -229,7 +231,7 @@ export const putTicket = (ticketID, updatedTicket) => {
   return dispatch => {
     request(`/tickets/${ticketID}`, 'put', { data: updatedTicket })
       .then(() => dispatch(getTicketSingle(updatedTicket)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -245,7 +247,7 @@ export const removeSPFromTicket = (ticketID, serviceProviderID) => {
         dispatch(removeTicketSP());
         dispatch(fetchTicketThreads(ticketID));
       })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -260,7 +262,7 @@ export const duplicateTicket = (ticketID, implementingPartnerID, redirectCallbac
         dispatch(fetchTicketSingle(res.data[0]));
         dispatch(fetchTicketThreads(res.data[0]));
       })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -280,7 +282,7 @@ export const updateTicketFilters = (filterKey, filterList) => {
 export const createGrouping = (title, description, redirectCallback) => {
   request('/groupings', 'post', {data: {title, description}})
     .then(res => redirectCallback(`/groupings/${res.data[0]}`))
-  .catch(function(err) {checkErrors(err);});
+  .catch(function(err) {dispatch(checkErrors(err));});
 };
 
 export const getGroupings = groupings => {
@@ -292,7 +294,7 @@ export const fetchGroupings = () => {
     request('/groupings', 'get').then(res => {
       dispatch(getGroupings(res.data));
     })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -309,7 +311,7 @@ export const fetchGrouping = groupingID => {
     request(`/groupings/${groupingID}`, 'get').then(res => {
       dispatch(getGrouping(res.data));
     })
-      .catch(function(err) {checkErrors(err);});
+      .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -322,7 +324,7 @@ export const putGrouping = (groupingID, title, description) => {
     request(`/groupings/${groupingID}`, 'put', {
       data: {title, description}
     }).then(() => dispatch(updateGrouping(title, description)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -350,7 +352,7 @@ export const deleteTicketsFromGrouping = ticketIDs => {
     axios
       .all(ticketIDs.map(id => request(`/tickets/${id}`, 'delete')))
       .then(() => dispatch(removeTicketsFromGroupingList(ticketIDs)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -360,7 +362,7 @@ export const deleteTicketsAndGrouping = (ticketIDs, groupingID, redirectCallback
       .all(ticketIDs.map(id => request(`/tickets/${id}`, 'delete')))
       .then(request(`/groupings/${groupingID}`, 'delete'))
       .then(() => redirectCallback(`/groupings`))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -370,7 +372,7 @@ export const untagTicketsAndDeleteGrouping = (ticketIDs, groupingID, redirectCal
       .all(ticketIDs.map(id => request(`/tickets/${id}/groupings/${groupingID}`, 'delete')))
       .then(request(`/groupings/${groupingID}`, 'delete'))
       .then(() => redirectCallback(`/groupings`))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -383,7 +385,7 @@ export const assignStatusToGroupingTickets = (status, tickets) => {
     axios
       .all(tickets.map(ticket => request(`/tickets/${ticket.ticket_id}`, 'put', {data: {status}})))
       .then(() => dispatch(updateTicketStatusesForGrouping(status, tickets.map(t => t.ticket_id))))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -402,7 +404,7 @@ export const fetchServiceProviders = () => {
     request('/sp_profiles', 'get').then(res => {
       dispatch(getServiceProviders(res.data));
     })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -411,7 +413,7 @@ export const fetchServiceProvider = id => {
     request(`/sp_profiles/${id}`, 'get').then(res => {
       dispatch(getServiceProvider(res.data));
     })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -427,7 +429,7 @@ export const deleteServiceProviders = (ids, redirect) => {
         dispatch(removeServiceProviders(ids));
         if (redirect) redirect();
       })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -441,7 +443,7 @@ export const putServiceProvider = (SPID, updatedServiceProvider) => {
       // The data that was PUT may be incomplete,
       // so dispatch a new fetch to get the complete, updated SP
       .then(() => dispatch(fetchServiceProvider(SPID)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -450,7 +452,7 @@ export const deleteServiceProviderTickets = (newSP, ticketIDs) => {
     axios
       .all(ticketIDs.map(ticketID => request(`/tickets/${ticketID}`, 'delete')))
       .then(() => dispatch(getServiceProvider(newSP)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -462,7 +464,7 @@ export const assignStatusToSPTickets = (status, ticketIDs, sp) => {
         const updatedTickets = sp.tickets.map(t => ticketIDs.includes(t.id) ? Object.assign({}, t, { status: status }) : t);
         dispatch(getServiceProvider(Object.assign({}, sp, { tickets: updatedTickets })));
       })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -472,7 +474,7 @@ export const createSpProfile = (data, isAdmin) => {
   return dispatch => {
     return request(route, 'post', {data})
       .then(() => dispatch(onComplete))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -491,7 +493,7 @@ export const deleteImplementingPartners = (ids, redirect) => {
         dispatch(removeImplementingPartners(ids));
         if (redirect) redirect();
       })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -508,7 +510,7 @@ export const fetchImplementingPartners = () => {
     request('/ip_profiles', 'get').then(res => {
       dispatch(getImplementingPartners(res.data));
     })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -517,7 +519,7 @@ export const deleteImplementingPartnerTickets = (newIP, ticketIDs) => {
     axios
       .all(ticketIDs.map(ticketID => request(`/tickets/${ticketID}`, 'delete')))
       .then(() => dispatch(getImplementingPartner(newIP)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -529,7 +531,7 @@ export const assignStatusToIPTickets = (status, ticketIDs, ip) => {
         const updatedTickets = ip.tickets.map(t => ticketIDs.includes(t.id) ? Object.assign({}, t, { status: status }) : t);
         dispatch(getImplementingPartner(Object.assign({}, ip, { tickets: updatedTickets })));
       })
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -539,7 +541,7 @@ export const createIpProfile = (data, isAdmin) => {
   return dispatch => {
     return request(route, 'post', {data})
       .then(() => dispatch(onComplete))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -547,7 +549,7 @@ export const putIpProfile = (partnerID, data) => {
   return dispatch => {
     return request(`/ip_profiles/${partnerID}`, 'put', {data: data})
       .then(() => dispatch(fetchImplementingPartner(partnerID)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -559,7 +561,7 @@ export const fetchImplementingPartner = id => {
   return dispatch => {
     request(`/ip_profiles/${id}`, 'get').then(res => {
       dispatch(getImplementingPartner(res.data))
-      .catch(function(err) {checkErrors(err);});
+      .catch(function(err) {dispatch(checkErrors(err));});
     });
   };
 };
@@ -574,7 +576,7 @@ export const fetchThread = threadID => {
   return dispatch => {
     request(`/threads/${threadID}`, 'get')
       .then(res => dispatch(getThread(res.data)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -586,7 +588,7 @@ export const fetchTicketThreads = ticketID => {
   return dispatch => {
     request(`/tickets/${ticketID}/threads`, 'get')
       .then(res => dispatch(getThreads(res.data)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -594,7 +596,7 @@ export const fetchGroupingThreads = groupingID => {
   return dispatch => {
     request(`/groupings/${groupingID}/threads`, 'get')
       .then(res => dispatch(getThreads(res.data)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -606,7 +608,7 @@ export const deleteMessage = messageID => {
   return dispatch => {
     request(`/messages/${messageID}`, 'delete')
       .then(() => dispatch(removeMessage(messageID)))
-    .catch(function(err) {checkErrors(err);});
+    .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
 
@@ -617,6 +619,6 @@ export const createMessage = (threadID, content) => {
       // add this message into the Redux store;
       // we need to re-fetch the data for that thread
       .then(() => dispatch(fetchThread(threadID)))
-      .catch(function(err) {checkErrors(err);});
+      .catch(function(err) {dispatch(checkErrors(err));});
   };
 };
