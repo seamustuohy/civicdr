@@ -222,7 +222,7 @@ var TicketSingle = React.createClass({
             spName={serviceProvider ? serviceProvider.name : ''}
             roles={roles}
             delete={messageID => this.props.dispatch(deleteMessage(messageID))}
-            create={(threadID, content) => this.props.dispatch(createMessage(threadID, content))}
+      create={(threadID, content) =>  if (content !== '') {this.props.dispatch(createMessage(threadID, content))}}
           />
           </section>
          { isAdmin ? <aside className='ticket__sidebar'>
