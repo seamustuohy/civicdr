@@ -12,12 +12,18 @@ import { connect } from 'react-redux';
 var Logout = React.createClass({
   propTypes: {
     route: T.object,
-    router: T.object
+    router: T.object,
+    secret: T.string
   },
 
   componentWillMount: function () {
-    this.props.route.auth.logout();
-    this.props.router.push('/');
+    let {secret} = this.props;
+    if (this.props.route.auth.checkSecret(secret)) {
+      this.props.route.auth.logout();
+      this.props.router.push('/');
+    } else {
+      this.props.router.push('/unauthorized');
+    }
   },
 
   render: function () {
@@ -25,4 +31,9 @@ var Logout = React.createClass({
   }
 });
 
-module.exports = connect()(Logout);
+function selector (state) {
+  return {
+    secret: state.auth.secret
+  };
+}
+module.exports = connect(selector)(Logout);
