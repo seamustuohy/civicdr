@@ -226,7 +226,7 @@ var TicketSingle = React.createClass({
               if (content !== '') {
                 this.props.dispatch(createMessage(threadID, content))
               }
-            };
+            }
                    }
           />
           </section>
