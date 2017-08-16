@@ -69,13 +69,15 @@ class Threads extends React.Component {
          >
          </textarea>
             <button
-             disabled={this.newMessageField.value == ''}
+             disabled={this.newMessageField.value === ''}
              className='button button--large button--base'
              onClick={() => {
-               if (this.newMessageField.value != '') {
+               if (this.newMessageField.value !== '') {
                  this.props.create(visibleThread.id, this.newMessageField.value);
                  this.newMessageField.value = '';
-             }}}>Comment</button>
+               }
+             }
+                     }>Comment</button>
             </div>
           </div>
           : ''
