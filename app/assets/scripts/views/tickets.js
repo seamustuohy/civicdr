@@ -26,6 +26,14 @@ import {
 // For the admin it shows all tickets in the system
 // For an IP or SP, it shows all assigned tickets
 export class Tickets extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isErrorModalVisible: false,
+      errorMsg: null
+    };
+  }
+
   componentWillMount () {
     this.props.dispatch(fetchTickets());
   }
@@ -46,13 +54,6 @@ export class Tickets extends React.Component {
           return filters[key].includes(ticket[key]);
       }
     });
-  }
-
-  getInitialState () {
-    return {
-      isErrorModalVisible: false,
-      errorMsg: null
-    };
   }
 
   render () {
@@ -130,7 +131,6 @@ Tickets.propTypes = {
   tickets: T.array,
   filters: T.object,
   roles: T.array,
-  router: T.object
 };
 
 // /////////////////////////////////////////////////////////////////// //
