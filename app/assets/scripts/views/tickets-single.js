@@ -35,6 +35,7 @@ import SelectServiceProvider from '../components/select-service-provider';
 import TicketEdit from '../components/ticket-edit';
 import DeleteModal from '../components/delete-modal';
 import TicketDuplicationModal from '../components/ticket-duplication-modal';
+import ErrorModal from '../components/error-modal';
 
 // View for a single ticket
 // Includes ticket metadata and messages
@@ -66,7 +67,9 @@ var TicketSingle = React.createClass({
       isServiceProviderModalVisible: false,
       isEditTicketModalVisible: false,
       isDeleteModalVisible: false,
-      isDuplicationModalVisible: false
+      isDuplicationModalVisible: false,
+      isErrorModalVisible: false,
+      errorMsg: null
     };
   },
 
@@ -98,7 +101,18 @@ var TicketSingle = React.createClass({
     return (
       <div>
         <div className='inner'>
-
+          <div style={{display: this.state.isErrorModalVisible ? 'block' : 'none'}}>
+            <ErrorModal
+              onLogout={() => {
+                this.props.dispatch(removeErrors());
+                this.props.router.push('/logout');
+              }}
+              onClose={() => {
+                this.props.dispatch(removeErrors());
+              }}
+              error={this.state.error}
+            />
+          </div>
           <div style={{display: this.state.isEditTicketModalVisible ? 'block' : 'none'}}>
             <TicketEdit
               onClose={() => this.setState({isEditTicketModalVisible: false})}

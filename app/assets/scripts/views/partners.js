@@ -11,6 +11,7 @@ import _ from 'lodash';
 import PartnerList from '../components/partner-list';
 import PartnerFilters from '../components/partner-filters';
 import ListActions from '../components/list-actions';
+import ErrorModal from '../components/error-modal';
 import downloadObject from '../utils/download-object';
 
 import {
@@ -35,7 +36,8 @@ var Partners = React.createClass({
     implementingPartners: T.array,
     dispatch: T.func,
     filters: T.object,
-    roles: T.array
+    roles: T.array,
+    router: T.object
   },
 
   filterPartner: function (ip) {
@@ -58,6 +60,13 @@ var Partners = React.createClass({
     this.props.dispatch(fetchImplementingPartners());
   },
 
+  getInitialState: function () {
+    return {
+      isErrorModalVisible: false,
+      errorMsg: null
+    };
+  },
+
   render: function () {
     const { implementingPartners, filters, dispatch } = this.props;
     // filtering all tickets
@@ -65,6 +74,18 @@ var Partners = React.createClass({
     const checked = implementingPartners.filter(ip => ip.checked);
     return (
       <div className='dashboard'>
+        <div style={{display: this.state.isErrorModalVisible ? 'block' : 'none'}}>
+          <ErrorModal
+            onLogout={() => {
+              this.props.dispatch(removeErrors());
+              this.props.router.push('/logout');
+            }}
+            onClose={() => {
+              this.props.dispatch(removeErrors());
+            }}
+            error={this.state.error}
+          />
+        </div>
         <header className='inpage__header'>
           <div className='inner'>
             <div className='inpage__headline'>

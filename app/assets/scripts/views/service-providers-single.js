@@ -14,6 +14,7 @@ import TicketList from '../components/ticket-list';
 import ServiceProviderEdit from '../components/service-provider-edit';
 import downloadObject from '../utils/download-object';
 import DeleteModal from '../components/delete-modal';
+import ErrorModal from '../components/error-modal';
 
 import {
   fetchServiceProvider,
@@ -38,7 +39,9 @@ var ServiceProviderSingle = React.createClass({
   getInitialState: function () {
     return {
       isEditModalVisible: false,
-      isDeleteModalVisible: false
+      isDeleteModalVisible: false,
+      isErrorModalVisible: false,
+      errorMsg: null
     };
   },
 
@@ -58,6 +61,18 @@ var ServiceProviderSingle = React.createClass({
     const checked = provider.tickets.filter(t => t.checked);
     return (
       <section className='section grouping-single'>
+        <div style={{display: this.state.isErrorModalVisible ? 'block' : 'none'}}>
+          <ErrorModal
+            onLogout={() => {
+              this.props.dispatch(removeErrors());
+              this.props.router.push('/logout');
+            }}
+            onClose={() => {
+              this.props.dispatch(removeErrors());
+            }}
+            error={this.state.error}
+          />
+        </div>
         <div style={{display: this.state.isEditModalVisible ? 'block' : 'none'}}>
           <ServiceProviderEdit
             onClose={() => this.setState({isEditModalVisible: false})}

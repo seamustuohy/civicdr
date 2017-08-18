@@ -13,6 +13,7 @@ import ListActions from '../components/list-actions';
 import TicketList from '../components/ticket-list';
 import ImplementingPartnerEdit from '../components/partner-edit';
 import DeleteModal from '../components/delete-modal';
+import ErrorModal from '../components/error-modal';
 
 import {
   fetchImplementingPartner,
@@ -37,7 +38,9 @@ var ImplemetingPartnerSingle = React.createClass({
   getInitialState: function () {
     return {
       isEditModalVisible: false,
-      isDeleteModalVisible: false
+      isDeleteModalVisible: false,
+      isErrorModalVisible: false,
+      errorMsg: null
     };
   },
 
@@ -56,6 +59,18 @@ var ImplemetingPartnerSingle = React.createClass({
     const checked = partner.tickets.filter(t => t.checked);
     return (
       <section className='section partner-single'>
+        <div style={{display: this.state.isErrorModalVisible ? 'block' : 'none'}}>
+          <ErrorModal
+            onLogout={() => {
+              this.props.dispatch(removeErrors());
+              this.props.router.push('/logout');
+            }}
+            onClose={() => {
+              this.props.dispatch(removeErrors());
+            }}
+            error={this.state.error}
+          />
+        </div>
 
         <div style={{display: this.state.isEditModalVisible ? 'block' : 'none'}}>
           <ImplementingPartnerEdit

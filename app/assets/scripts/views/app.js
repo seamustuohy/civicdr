@@ -26,15 +26,7 @@ var App = React.createClass({
     profile: T.object,
     route: T.object,
     roles: T.array,
-    secret: T.string,
-    router: T.object
-  },
-
-  getInitialState: function () {
-    return {
-      isErrorModalVisible: false,
-      errorMsg: null
-    };
+    secret: T.string
   },
 
   componentDidMount: function () {
@@ -55,18 +47,6 @@ var App = React.createClass({
           profile={this.props.profile}
         />
         <main className="page__body" role="main">
-          <div style={{display: this.state.isErrorModalVisible ? 'block' : 'none'}}>
-            <ErrorModal
-              onLogout={() => {
-                this.props.dispatch(removeErrors());
-                this.props.router.push('/logout');
-              }}
-              onClose={() => {
-                this.props.dispatch(removeErrors());
-              }}
-              error={this.state.error}
-            />
-        </div>
           {this.props.children}
         </main>
         <PageFooter className={c({hidden})} />

@@ -11,6 +11,7 @@ import _ from 'lodash';
 import TicketFilters from '../components/ticket-filters';
 import TicketList from '../components/ticket-list';
 import ListActions from '../components/list-actions';
+import ErrorModal from '../components/error-modal';
 import downloadObject from '../utils/download-object';
 
 import {
@@ -46,6 +47,13 @@ export class Tickets extends React.Component {
     });
   }
 
+  getInitialState () {
+    return {
+      isErrorModalVisible: false,
+      errorMsg: null
+    };
+  }
+
   render () {
     const { tickets, filters, dispatch } = this.props;
     // filtering all tickets
@@ -53,6 +61,18 @@ export class Tickets extends React.Component {
     const checked = tickets.filter(t => t.checked);
     return (
       <section className="section">
+        <div style={{display: this.state.isErrorModalVisible ? 'block' : 'none'}}>
+          <ErrorModal
+            onLogout={() => {
+              this.props.dispatch(removeErrors());
+              this.props.router.push('/logout');
+            }}
+            onClose={() => {
+              this.props.dispatch(removeErrors());
+            }}
+            error={this.state.error}
+          />
+        </div>
         <div className="dashboard">
           <header className="inpage__header">
             <div className="inner">
@@ -108,7 +128,8 @@ Tickets.propTypes = {
   dispatch: T.func,
   tickets: T.array,
   filters: T.object,
-  roles: T.array
+  roles: T.array,
+  router: T.object
 };
 
 // /////////////////////////////////////////////////////////////////// //

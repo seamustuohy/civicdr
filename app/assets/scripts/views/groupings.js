@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import GroupingsList from '../components/groupings-list';
 import CreateEditGrouping from '../components/create-edit-grouping';
+import ErrorModal from '../components/error-modal';
 
 import { createGrouping, fetchGroupings, toggleGroupingsModal } from '../actions';
 
@@ -25,9 +26,28 @@ var Groupings = React.createClass({
     this.props.dispatch(fetchGroupings());
   },
 
+  getInitialState: function () {
+    return {
+      isErrorModalVisible: false,
+      errorMsg: null
+    };
+  },
+
   render: function () {
     return (
       <section className='section section--groupings'>
+        <div style={{display: this.state.isErrorModalVisible ? 'block' : 'none'}}>
+          <ErrorModal
+            onLogout={() => {
+              this.props.dispatch(removeErrors());
+              this.props.router.push('/logout');
+            }}
+            onClose={() => {
+              this.props.dispatch(removeErrors());
+            }}
+            error={this.state.error}
+          />
+        </div>
         <GroupingsList
           groupings={this.props.groupings}
           onCreateGrouping={() => { this.props.dispatch(toggleGroupingsModal()); }}

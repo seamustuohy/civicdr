@@ -14,6 +14,7 @@ import ListActions from '../components/list-actions';
 import TicketList from '../components/ticket-list';
 import DeleteGrouping from '../components/delete-grouping';
 import CreateEditGrouping from '../components/create-edit-grouping';
+import ErrorModal from '../components/error-modal';
 
 import {
   fetchGrouping,
@@ -52,6 +53,13 @@ var GroupingSingle = React.createClass({
     threads: React.PropTypes.array
   },
 
+  getInitialState: function () {
+    return {
+      isErrorModalVisible: false,
+      errorMsg: null
+    };
+  },
+
   componentDidMount: function () {
     this.props.dispatch(fetchGrouping(this.props.routeParams.groupingID));
     this.props.dispatch(fetchGroupingThreads(this.props.routeParams.groupingID));
@@ -65,6 +73,18 @@ var GroupingSingle = React.createClass({
   render: function () {
     return (
       <section className='section grouping-single'>
+        <div style={{display: this.state.isErrorModalVisible ? 'block' : 'none'}}>
+          <ErrorModal
+            onLogout={() => {
+              this.props.dispatch(removeErrors());
+              this.props.router.push('/logout');
+            }}
+            onClose={() => {
+              this.props.dispatch(removeErrors());
+            }}
+            error={this.state.error}
+          />
+        </div>
         <div className='inner inner-shadow'>
           <header className='ticket__header'>
             <div className='grouping__header--content'>

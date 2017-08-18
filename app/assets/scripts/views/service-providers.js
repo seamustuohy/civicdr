@@ -11,6 +11,7 @@ import _ from 'lodash';
 import ProviderList from '../components/service-providers-list';
 import ProviderFilters from '../components/provider-filters';
 import ListActions from '../components/list-actions';
+import ErrorModal from '../components/error-modal';
 import downloadObject from '../utils/download-object';
 
 import {
@@ -26,7 +27,8 @@ var ServiceProviders = React.createClass({
     serviceProviders: T.array,
     dispatch: T.func,
     filters: T.object,
-    roles: T.array
+    roles: T.array,
+    router: T.object
   },
 
   filterServiceProvider: function (sp) {
@@ -40,6 +42,13 @@ var ServiceProviders = React.createClass({
       ? filters[key].some(f => sp.services.includes(f))
       : filters[key].includes(sp[key]);
     });
+  },
+
+  getInitialState: function () {
+    return {
+      isErrorModalVisible: false,
+      errorMsg: null
+    };
   },
 
   componentDidMount: function () {
@@ -57,6 +66,18 @@ var ServiceProviders = React.createClass({
     const checked = serviceProviders.filter(sp => sp.checked);
     return (
       <div className='dashboard'>
+        <div style={{display: this.state.isErrorModalVisible ? 'block' : 'none'}}>
+          <ErrorModal
+            onLogout={() => {
+              this.props.dispatch(removeErrors());
+              this.props.router.push('/logout');
+            }}
+            onClose={() => {
+              this.props.dispatch(removeErrors());
+            }}
+            error={this.state.error}
+          />
+        </div>
         <header className='inpage__header'>
           <div className='inner'>
             <div className='inpage__headline'>
