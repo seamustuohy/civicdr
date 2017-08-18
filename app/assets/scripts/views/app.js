@@ -30,6 +30,13 @@ var App = React.createClass({
     router: T.object
   },
 
+  getInitialState: function () {
+    return {
+      isErrorModalVisible: false,
+      errorMsg: null
+    };
+  },
+
   componentDidMount: function () {
     if (
       this.props.roles &&

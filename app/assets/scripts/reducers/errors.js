@@ -6,7 +6,7 @@ import {
 } from '../actions';
 
 export const initialState = {
-  error: null,
+  errorMsg: null,
   isErrorModalVisible: false,
   offerLogout: false
 };
@@ -20,7 +20,7 @@ export default (state = initialState, action) => {
         newState.offerLogout = true;
       }
       if (action.msg) {
-        newState.error = action.msg;
+        newState.errorMsg = action.msg;
       }
       newState.isErrorModalVisible = true;
       break;
