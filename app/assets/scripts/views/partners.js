@@ -18,7 +18,8 @@ import {
   fetchImplementingPartners,
   getImplementingPartner,
   getImplementingPartners,
-  deleteImplementingPartners
+  deleteImplementingPartners,
+  removeErrors
 } from '../actions';
 
 const contactDownloadFields = [

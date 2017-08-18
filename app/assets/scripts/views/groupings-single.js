@@ -29,7 +29,8 @@ import {
   assignStatusToGroupingTickets,
   fetchGroupingThreads,
   deleteMessage,
-  createMessage
+  createMessage,
+  removeErrors
 } from '../actions';
 import { formatDate } from '../utils/format';
 

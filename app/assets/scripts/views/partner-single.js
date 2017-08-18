@@ -21,7 +21,8 @@ import {
   putIpProfile,
   deleteImplementingPartners,
   deleteImplementingPartnerTickets,
-  assignStatusToIPTickets
+  assignStatusToIPTickets,
+  removeErrors
 } from '../actions';
 
 // View for a single Implementing Partner

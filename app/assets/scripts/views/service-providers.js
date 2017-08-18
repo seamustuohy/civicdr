@@ -18,7 +18,8 @@ import {
   fetchServiceProviders,
   getServiceProvider,
   getServiceProviders,
-  deleteServiceProviders
+  deleteServiceProviders,
+  removeErrors
 } from '../actions';
 
 // List view of all Service Providers

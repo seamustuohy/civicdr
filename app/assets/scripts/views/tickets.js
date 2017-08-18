@@ -18,7 +18,8 @@ import {
   fetchTickets,
   getTickets,
   deleteTickets,
-  assignStatusToTickets
+  assignStatusToTickets,
+  removeErrors
 } from '../actions';
 
 // Site homepage, a view that lists all tickets

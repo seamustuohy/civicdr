@@ -22,7 +22,8 @@ import {
   putServiceProvider,
   getServiceProvider,
   deleteServiceProviderTickets,
-  assignStatusToSPTickets
+  assignStatusToSPTickets,
+  removeErrors
 } from '../actions';
 
 // View of a single Service Provider

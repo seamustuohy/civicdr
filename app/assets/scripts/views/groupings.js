@@ -9,7 +9,12 @@ import GroupingsList from '../components/groupings-list';
 import CreateEditGrouping from '../components/create-edit-grouping';
 import ErrorModal from '../components/error-modal';
 
-import { createGrouping, fetchGroupings, toggleGroupingsModal } from '../actions';
+import {
+  createGrouping,
+  fetchGroupings,
+  toggleGroupingsModal,
+  removeErrors
+} from '../actions';
 
 // View with a table of all groupings
 var Groupings = React.createClass({

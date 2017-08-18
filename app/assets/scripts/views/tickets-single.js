@@ -25,7 +25,8 @@ import {
   deleteMessage,
   createMessage,
   deleteTickets,
-  duplicateTicket
+  duplicateTicket,
+  removeErrors
 } from '../actions';
 
 import { ticketStatusLUT } from '../constants';
