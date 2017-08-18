@@ -53,7 +53,7 @@ var App = React.createClass({
               onLogout={() => {
                 this.props.dispatch(removeErrors());
                 this.props.router.push('/logout');
-              }
+              }}
               onClose={() => {
                 this.props.dispatch(removeErrors());
               }}

@@ -1,4 +1,5 @@
 'use strict';
+
 import {
   ADD_ERROR,
   REMOVE_ERROR
@@ -8,14 +9,14 @@ export const initialState = {
   error: null,
   isErrorModalVisible: false,
   offerLogout: false
-}
+};
 
-function errors(state = initialState, action) {
-  const newState = Object.assign({}, state);
+export default (state = initialState, action) => {
+  let newState = Object.assign({}, state);
 
   switch (action.type) {
     case ADD_ERROR:
-      if (action.error === "unauthorized") {
+      if (action.error === 'unauthorized') {
         newState.offerLogout = true;
       }
       if (action.msg) {

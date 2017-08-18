@@ -50,21 +50,20 @@ export const REMOVE_MESSAGE = 'REMOVE_MESSAGE';
 export const ADD_ERROR = 'ADD_ERROR';
 export const REMOVE_ERROR = 'REMOVE_ERROR';
 
-
 // Generic error checker
 
 export const checkErrors = (err) => {
   // If the error is a 401 redirect the user to the unauthorized page.
   if (err.response.status === 401) {
-    return {type: ADD_ERROR, error: "unauthorized", msg: "You are not authorized to conduct that action. If you continue to get errors try logging out and back in."};
+    return {type: ADD_ERROR, error: 'unauthorized', msg: 'You are not authorized to conduct that action. If you continue to get errors try logging out and back in.'};
   } else {
-    return {type: ADD_ERROR, error: "unknown"};
+    return {type: ADD_ERROR, error: 'unknown'};
   }
 };
 
 export const removeErrors = () => {
-    return {type: REMOVE_ERROR};
-}
+  return {type: REMOVE_ERROR};
+};
 
 // Create the action-generators themselves
 
