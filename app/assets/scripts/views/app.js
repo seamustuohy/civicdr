@@ -27,6 +27,7 @@ var App = React.createClass({
     route: T.object,
     roles: T.array,
     secret: T.string,
+    router: T.object,
     error: T.object
   },
 
