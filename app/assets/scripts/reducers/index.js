@@ -10,6 +10,7 @@ import auth from './auth';
 import ticketSingle from './ticket-single';
 import implementingPartners from './implementing-partners';
 import threads from './threads';
+import errors from './errors';
 
 export const reducers = {
   tickets,
@@ -19,7 +20,8 @@ export const reducers = {
   ticketSingle,
   implementingPartners,
   threads,
-  auth
+  auth,
+  errors
 };
 
 export default combineReducers(Object.assign({}, reducers, {

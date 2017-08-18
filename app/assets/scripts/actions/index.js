@@ -1,6 +1,5 @@
 import request from '../utils/request.js';
 import axios from 'axios';
-import { push } from 'react-router-redux';
 
 // Export the action string constants
 
@@ -48,17 +47,24 @@ export const POST_IP_PROFILE = 'POST_IP_PROFILE';
 export const GET_THREAD = 'GET_THREAD';
 export const GET_THREADS = 'GET_THREADS';
 export const REMOVE_MESSAGE = 'REMOVE_MESSAGE';
+export const ADD_ERROR = 'ADD_ERROR';
+export const REMOVE_ERROR = 'REMOVE_ERROR';
+
 
 // Generic error checker
 
 export const checkErrors = (err) => {
   // If the error is a 401 redirect the user to the unauthorized page.
   if (err.response.status === 401) {
-    return push('/unauthorized');
+    return {type: ADD_ERROR, error: "unauthorized", msg: "You are not authorized to conduct that action. If you continue to get errors try logging out and back in."};
   } else {
-    return {type: 'UNKNOWN_ERROR', data: err};
+    return {type: ADD_ERROR, error: "unknown"};
   }
 };
+
+export const removeErrors = () => {
+    return {type: REMOVE_ERROR};
+}
 
 // Create the action-generators themselves
 
