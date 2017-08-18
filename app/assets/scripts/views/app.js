@@ -58,7 +58,8 @@ var App = React.createClass({
               this.props.dispatch(removeErrors());
             }}
             error={this.props.error.errorMsg}
-          />
+        />
+        </div>
           {this.props.children}
         </main>
         <PageFooter className={c({hidden})} />
