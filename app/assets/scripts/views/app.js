@@ -12,7 +12,7 @@ import c from 'classnames';
 import PageHeader from '../components/page-header';
 import PageFooter from '../components/page-footer';
 import ErrorModal from '../components/error-modal';
-import {fetchProfile, removeErrors } from '../actions';
+import {fetchProfile, removeErrors} from '../actions';
 
 // Top-level application component
 // Just contains header, footer, and container for actual views
